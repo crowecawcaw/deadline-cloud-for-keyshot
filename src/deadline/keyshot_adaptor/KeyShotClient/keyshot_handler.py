@@ -3,14 +3,25 @@ from __future__ import annotations
 
 import os as os
 from pprint import pprint
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, Tuple
 
 try:
     import lux  # type: ignore
 except ImportError:  # pragma: no cover
     raise OSError("Could not find the KeyShot module. Are you running this inside of KeyShot?")
 
-
+# Mappings needed to determine the file extension and property KeyShot will
+# use to set the render output path and format
+_KEYSHOT_OUTPUT_FORMATS_TO_FILE_EXT: dict[str, str] = {
+    "RENDER_OUTPUT_PNG": "png",
+    "RENDER_OUTPUT_JPEG": "jpg",
+    "RENDER_OUTPUT_EXR": "exr",
+    "RENDER_OUTPUT_TIFF8": "tif",
+    "RENDER_OUTPUT_TIFF32": "tif",
+    "RENDER_OUTPUT_PSD8": "psd",
+    "RENDER_OUTPUT_PSD16": "psd",
+    "RENDER_OUTPUT_PSD32": "psd",
+}
 class KeyShotHandler:
     action_dict: Dict[str, Callable[[Dict[str, Any]], None]] = {}
     render_kwargs: Dict[str, Any]
@@ -57,6 +68,11 @@ class KeyShotHandler:
         opts.setAddToQueue(False)
         lux.setAnimationFrame(frame)
         output_path = self.output_path.replace("%d", str(frame))
+        
+        file_extension = _KEYSHOT_OUTPUT_FORMATS_TO_FILE_EXT[self.output_format_code]
+        if not output_path.endswith(file_extension):
+            output_path += file_extension
+        
         pprint(f"KeyShot Render Options: {opts}", indent=4)
         print(f"KeyShot Render Output Format: {self.output_format_code}")
         lux.renderImage(path=output_path, opts=opts, format=self.output_format_code)
