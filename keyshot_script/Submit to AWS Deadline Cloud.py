@@ -138,7 +138,7 @@ job_template = {
                         "name": "runData",
                         "filename": "run-data.yaml",
                         "type": "TEXT",
-                        "data": ("frame: {{Task.Param.Frame}}\n" ""),
+                        "data": "frame: {{Task.Param.Frame}}",
                     }
                 ],
                 "actions": {
@@ -243,7 +243,7 @@ with tempfile.TemporaryDirectory() as temp_dir:
             )
         else:
             subprocess.run(
-                ["deadline", "bundle", "gui-submit", "{temp_dir}"],
+                ["deadline", "bundle", "gui-submit", f"{temp_dir}"],
                 check=True,
                 capture_output=True,
                 text=True,
