@@ -357,7 +357,11 @@ def gui_submit(bundle_directory: str) -> Optional[dict[str, Any]]:
         return None
 
 
-def main():
+def main(lux):
+    if lux.isSceneChanged():
+        lux.getMessageBox(title="Unsaved changes", msg="You have unsaved changes. Save your scene and try again.")
+        raise Exception("Save changes first")
+
     scene_file = lux.getSceneInfo()["file"]
     external_files = lux.getExternalFiles()
     current_frame = lux.getAnimationFrame()
@@ -413,4 +417,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(lux)
