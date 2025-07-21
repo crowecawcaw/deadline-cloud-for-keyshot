@@ -410,14 +410,12 @@ The job template will be updated to:
 - Python build script will combine the separate files into the final submitter script
 - Build script will read component files, process/escape content, and insert into appropriate locations.
 - The specific files in the code will be:
-  - job_template.yaml - a job template skeleton with placeholders for the task and session embedded scripts
   - session.py - session script
   - task.py - task script
-  - submitter.py - containes the keyshot submitter code. has a place holder for the job template which build.py fills
+  - submitter.py - containes the keyshot submitter code and the job template skeleton. has a place holder for the job template which build.py fills
   - build.py - combine the various pieces by using string replacement on placeholders like `{TASK.PY}`
-    1.  reads and embeds session.py and task.py.
-    2.  reads job_template.yaml and embeds the scripts in it
-    3.  reads submitter.py and embeds the job template contents into it as a dict
+    1.  reads and embeds session.py and task.py
+    3.  reads submitter.py and embeds the session and task files as embedded files into the job template
     4.  writes out the final submitter to `dist/Submit to AWS Deadline Cloud.py`
 
 ## Style
